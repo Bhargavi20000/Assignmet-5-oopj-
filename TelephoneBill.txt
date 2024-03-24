@@ -1,0 +1,63 @@
+package in.acts.cdac;
+
+import java.util.Scanner;
+
+public class TelephoneBill {
+    private String customerName;
+    private String phoneNumber;
+    private int numberOfCalls;
+    private int totalDuration;
+    private double billAmount;
+    private static final double MONTHLY_FLAT_RATE = 10.0;
+    private static final double FIRST_100_CALL_RATE = 0.5;
+    private static final double BEYOND_100_CALL_RATE = 0.25;
+
+    public TelephoneBill(String customerName, String phoneNumber, int numberOfCalls, int totalDuration) {
+        this.customerName = customerName;
+        this.phoneNumber = phoneNumber;
+        this.numberOfCalls = numberOfCalls;
+        this.totalDuration = totalDuration;
+        this.billAmount = 0;
+    }
+
+    public void calculateBill() {
+        int callsBeyond100 = Math.max(numberOfCalls - 100, 0);
+        int first100CallsDuration = Math.min(numberOfCalls, 100) * 1; // each call at least 1 minute
+        int beyond100CallsDuration = Math.max(totalDuration - 100, 0);
+
+        double billForFirst100Calls = first100CallsDuration * FIRST_100_CALL_RATE;
+        double billForBeyond100Calls = beyond100CallsDuration * BEYOND_100_CALL_RATE;
+
+        billAmount = MONTHLY_FLAT_RATE + billForFirst100Calls + billForBeyond100Calls;
+    }
+
+    public void displayBill() {
+        System.out.println("Customer Name: " + customerName);
+        System.out.println("Phone Number: " + phoneNumber);
+        System.out.println("Number of Calls: " + numberOfCalls);
+        System.out.println("Total Duration (minutes): " + totalDuration);
+        System.out.println("Bill Amount: $" + billAmount);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter Customer Name:");
+        String customerName = sc.nextLine();
+
+        System.out.println("Enter Phone Number:");
+        String phoneNumber = sc.nextLine();
+
+        System.out.println("Enter Number of Calls:");
+        int numberOfCalls = sc.nextInt();
+
+        System.out.println("Enter Total Duration of Calls (minutes):");
+        int totalDuration = sc.nextInt();
+
+        TelephoneBill bill = new TelephoneBill(customerName, phoneNumber, numberOfCalls, totalDuration);
+        bill.calculateBill();
+        bill.displayBill();
+
+        sc.close();
+    }
+}

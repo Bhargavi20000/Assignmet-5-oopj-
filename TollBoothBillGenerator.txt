@@ -1,0 +1,93 @@
+package in.acts.cdac;
+
+import java.util.Scanner;
+
+public class TollBoothBillGenerator {
+    private String vehicleType;
+    private int numAxles;
+    private double distanceTraveled;
+    private double tollFee;
+    private double totalAmountDue;
+
+    public static void main(String[] args) {
+        TollBoothBillGenerator tollBooth = new TollBoothBillGenerator();
+        tollBooth.showMenu();
+    }
+
+    public void showMenu() {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        do {
+            System.out.println("\nMenu:");
+            System.out.println("1. Enter vehicle type (car, van, bus, or truck)");
+            System.out.println("2. Enter number of axles");
+            System.out.println("3. Enter distance travelled");
+            System.out.println("4. Calculate toll fee");
+            System.out.println("5. Generate bill");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter vehicle type: ");
+                    vehicleType = scanner.nextLine();
+                    break;
+                case 2:
+                    System.out.print("Enter number of axles: ");
+                    numAxles = scanner.nextInt();
+                    break;
+                case 3:
+                    System.out.print("Enter distance travelled: ");
+                    distanceTraveled = scanner.nextDouble();
+                    break;
+                case 4:
+                    calculateTollFee();
+                    break;
+                case 5:
+                    generateBill();
+                    break;
+                case 6:
+                    System.out.println("Exiting program. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please enter a number between 1 and 6.");
+            }
+        } while (choice != 6);
+
+        scanner.close();
+    }
+
+    private void calculateTollFee() {
+        if (vehicleType == null || numAxles == 0 || distanceTraveled == 0) {
+            System.out.println("Please enter vehicle information first.");
+            return;
+        }
+
+        double baseRate;
+        if (vehicleType.equalsIgnoreCase("truck")) {
+            baseRate = 0.50;
+        } else {
+            baseRate = 0.25;
+        }
+
+        tollFee = baseRate * numAxles * distanceTraveled;
+        System.out.println("Toll fee calculated: $" + tollFee);
+    }
+
+    private void generateBill() {
+        if (tollFee == 0) {
+            System.out.println("Please calculate toll fee first.");
+            return;
+        }
+
+        totalAmountDue = tollFee + 2.00;
+        System.out.println("\nBill Details:");
+        System.out.println("Vehicle type: " + vehicleType);
+        System.out.println("Number of axles: " + numAxles);
+        System.out.println("Distance travelled: " + distanceTraveled + " miles");
+        System.out.println("Toll fee: $" + tollFee);
+        System.out.println("Total amount due: $" + totalAmountDue);
+    }
+}
